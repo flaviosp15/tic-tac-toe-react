@@ -45,6 +45,7 @@ class Game extends React.Component {
       history: [
         {
           squares: Array(9).fill(null),
+          target: Array(2).fill(null),
         },
       ],
       stepNumber: 0,
@@ -61,7 +62,26 @@ class Game extends React.Component {
     }
     const icon = this.state.xIsNext ? 'X' : 'O';
     squares[i] = icon;
-    this.setState({ history: history.concat([{ squares: squares }]), stepNumber: history.length, xIsNext: !this.state.xIsNext });
+    const board = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+    ];
+    let column, row;
+    board.forEach((arr, r) => {
+      const c = arr.indexOf(i);
+      const wasTheIndexFound = c >= 0;
+      if (wasTheIndexFound) {
+        row = r + 1;
+        column = c + 1;
+      }
+    });
+    this.setState({
+      history: history.concat([{ squares: squares, target: [column, row] }]),
+      stepNumber: history.length,
+      xIsNext: !this.state.xIsNext,
+    });
+    console.log(this.state.history);
   }
 
   jumpTo(step) {
@@ -85,9 +105,11 @@ class Game extends React.Component {
         </li>
       );
     });
+    const [column, row] = current.target;
     return (
       <div className="game">
         <div className="game-board">
+          <div>{current.target[0] && `Col: ${column} | Row: ${row}`}</div>
           <Board squares={current.squares} onClick={i => this.handleClick(i)} />
         </div>
         <div className="game-info">
