@@ -62,20 +62,18 @@ class Game extends React.Component {
     }
     const icon = this.state.xIsNext ? 'X' : 'O';
     squares[i] = icon;
-    const board = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-    ];
-    let column, row;
-    board.forEach((arr, r) => {
-      const c = arr.indexOf(i);
-      const wasTheIndexFound = c >= 0;
-      if (wasTheIndexFound) {
-        row = r + 1;
-        column = c + 1;
-      }
-    });
+    const tableTarget = {
+      0: { col: 1, row: 1 },
+      1: { col: 2, row: 1 },
+      2: { col: 3, row: 1 },
+      3: { col: 1, row: 2 },
+      4: { col: 2, row: 2 },
+      5: { col: 3, row: 2 },
+      6: { col: 1, row: 3 },
+      7: { col: 2, row: 3 },
+      8: { col: 3, row: 3 },
+    };
+    const { col: column, row } = tableTarget[i];
     this.setState({
       history: history.concat([{ squares: squares, target: [column, row] }]),
       stepNumber: history.length,
