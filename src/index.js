@@ -79,7 +79,12 @@ class Game extends React.Component {
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
-    console.log(this.state.history);
+  }
+
+  styleSelectedMove(target) {
+    const buttons = document.querySelectorAll('li > button');
+    buttons.forEach(btn => (btn.style.fontWeight = 'initial'));
+    target.style.fontWeight = 'bold';
   }
 
   jumpTo(step) {
@@ -99,7 +104,14 @@ class Game extends React.Component {
       const desc = move ? `Go to move # ${move}` : 'Go to game start';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button
+            onClick={({ target }) => {
+              this.styleSelectedMove(target);
+              this.jumpTo(move);
+            }}
+          >
+            {desc}
+          </button>
         </li>
       );
     });
