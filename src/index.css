@@ -5,7 +5,7 @@ body {
 
 ol,
 ul {
-  padding-left: 30px;
+  padding-left: 15px;
 }
 
 .board-row:after {
@@ -14,6 +14,7 @@ ul {
   display: table;
 }
 
+.game-board > div:first-child,
 .status {
   margin-bottom: 10px;
 }
@@ -48,4 +49,8 @@ ul {
 
 .game-info {
   margin-left: 20px;
+}
+
+.game-info > button {
+  margin-top: 10px;
 }
