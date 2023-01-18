@@ -22,7 +22,7 @@ class Board extends React.Component {
     let square = 0;
     return boardRows.map((_, i) => (
       <div key={i} className="board-row">
-        {boardColumns.map(_ => this.renderSquare(square++))}
+        {boardColumns.map(() => this.renderSquare(square++))}
       </div>
     ));
   }
@@ -81,7 +81,8 @@ class Game extends React.Component {
     target.style.fontWeight = 'bold';
   }
 
-  jumpTo(step) {
+  jumpTo(target, step) {
+    this.styleSelectedMove(target);
     this.setState({
       stepNumber: step,
       xIsNext: step % 2 === 0,
@@ -100,8 +101,7 @@ class Game extends React.Component {
         <li key={move}>
           <button
             onClick={({ target }) => {
-              this.styleSelectedMove(target);
-              this.jumpTo(move);
+              this.jumpTo(target, move);
             }}
           >
             {desc}
