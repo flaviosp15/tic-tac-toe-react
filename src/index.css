@@ -54,3 +54,19 @@ ul {
 .game-info > button {
   margin-top: 10px;
 }
+
+button > svg {
+  pointer-events: none;
+}
+
+button > svg:nth-child(2) {
+  display: none;
+}
+
+.active > svg:first-child {
+  display: none;
+}
+
+.active > svg:nth-child(2) {
+  display: initial;
+}
