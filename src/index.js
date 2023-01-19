@@ -38,6 +38,7 @@ class Game extends React.Component {
     this.state = {
       history: [
         {
+          move: 0,
           squares: Array(9).fill(null),
           target: Array(2).fill(null),
         },
@@ -69,24 +70,50 @@ class Game extends React.Component {
     };
     const { col: column, row } = tableTarget[i];
     this.setState({
-      history: history.concat([{ squares: squares, target: [column, row] }]),
+      history: history.concat([{ move: this.state.stepNumber + 1, squares: squares, target: [column, row] }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
   }
 
-  styleSelectedMove(target) {
-    const buttons = document.querySelectorAll('li > button');
+  styleSelectedMove(target, buttons) {
     buttons.forEach(btn => (btn.style.fontWeight = 'initial'));
     target.style.fontWeight = 'bold';
   }
 
   jumpTo(target, step) {
-    this.styleSelectedMove(target);
+    const buttons = document.querySelectorAll('li > button');
+    let selectedBtn;
+    buttons.forEach(btn => {
+      if (btn.innerText === target.innerText) {
+        selectedBtn = btn;
+      }
+    });
+    this.styleSelectedMove(selectedBtn, buttons);
     this.setState({
+      selection: target.innerText,
       stepNumber: step,
       xIsNext: step % 2 === 0,
     });
+  }
+
+  toggleClassName(target) {
+    target.classList.toggle('active');
+    const value = target.classList.value;
+    return this.sortList(value);
+  }
+
+  sortList(value) {
+    const history = this.state.history;
+    if (value) {
+      this.setState({
+        history: history.sort((a, b) => b.move - a.move),
+      });
+    } else {
+      this.setState({
+        history: history.sort((a, b) => a.move - b.move),
+      });
+    }
   }
 
   render() {
@@ -95,7 +122,7 @@ class Game extends React.Component {
     const icon = this.state.xIsNext ? 'X' : 'O';
     const winner = calculateWinner(current.squares);
     const status = winner ? `Winner: ${winner}` : `Next player: ${icon}`;
-    const move = history.map((step, move) => {
+    const move = history.map(({ move }) => {
       const desc = move ? `Go to move # ${move}` : 'Go to game start';
       return (
         <li key={move}>
@@ -118,6 +145,14 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <button onClick={({ target }) => this.toggleClassName(target)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M11 9h9v2h-9zm0 4h7v2h-7zm0-8h11v2H11zm0 12h5v2h-5zm-6 3h2V8h3L6 4 2 8h3z"></path>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="m6 20 4-4H7V4H5v12H2zm5-12h9v2h-9zm0 4h7v2h-7zm0-8h11v2H11zm0 12h5v2h-5z"></path>
+            </svg>
+          </button>
           <ol>{move}</ol>
         </div>
       </div>
